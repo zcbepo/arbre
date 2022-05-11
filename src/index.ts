@@ -13,7 +13,7 @@ interface TreeNode extends TreeArrayItem {
 type CallbackFn<T> = (element: TreeNode) => T
 
 
-export default class Tree {
+export default class Arbre {
     private _raw: TreeNode[]
 
     constructor(raw: TreeNode[]) {
@@ -40,7 +40,7 @@ export default class Tree {
                 parent.children.push(map.get(item.id) as TreeNode)
             }
         })
-        return new Tree(root)
+        return new Arbre(root)
     }
 
     flat() {
