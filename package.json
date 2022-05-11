@@ -1,6 +1,6 @@
 {
   "name": "arbre-tree",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "index.js",
   "author": "zcbepo",
   "description": "Array-like Api for Tree structure",
