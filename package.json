@@ -1,0 +1,23 @@
+{
+  "name": "tree",
+  "version": "0.0.1",
+  "main": "index.js",
+  "author": "zcbepo",
+  "description": "Array-like Api for Tree structure",
+  "license": "MIT",
+  "dependencies": {
+    "@rollup/plugin-typescript": "^8.3.2",
+    "jest": "^28.1.0",
+    "rollup": "^2.72.1",
+    "tslib": "^2.4.0"
+  },
+  "scripts": {
+    "build": "rimraf lib && rollup -c",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.5.0",
+    "ts-jest": "^28.0.2",
+    "typescript": "^4.6.4"
+  }
+}
