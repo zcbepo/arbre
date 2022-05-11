@@ -6,9 +6,9 @@
   "description": "Array-like Api for Tree structure",
   "license": "MIT",
   "dependencies": {
-    "@rollup/plugin-typescript": "^8.3.2",
     "jest": "^28.1.0",
     "rollup": "^2.72.1",
+    "rollup-plugin-typescript2": "^0.31.2",
     "tslib": "^2.4.0"
   },
   "scripts": {
