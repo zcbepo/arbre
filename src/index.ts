@@ -1,16 +1,21 @@
+import { isTreeNode } from "./utils"
+
 type StringOrNumber = string | number
 
-interface TreeArrayItem {
+export interface TreeArrayItem {
     id: StringOrNumber
     pid: StringOrNumber
     [key: string]: any
 }
 
-interface TreeNode extends TreeArrayItem {
+export interface TreeNode extends TreeArrayItem {
     children?: TreeNode[]
 }
 
-type CallbackFn<T> = (element: TreeNode) => T
+/**
+ * tree iterator callback function, pass TreeNode
+ */
+export type CallbackFn<T> = (element: TreeNode) => T
 
 
 export default class Arbre {
@@ -24,6 +29,11 @@ export default class Arbre {
         return this._raw
     }
 
+    /**
+     * Convert Array to Tree
+     * @param arr 
+     * @returns 
+     */
     static from(arr: TreeArrayItem[]) {
         const map = new Map<StringOrNumber, TreeNode>(), root: TreeNode[] = []
         arr.forEach(item => {
@@ -43,6 +53,26 @@ export default class Arbre {
         return new Arbre(root)
     }
 
+    push(node: TreeNode) {
+        if (!isTreeNode(node)) return
+        let arr;
+        if (node.pid === -1) {
+            arr = this._raw
+        } else {
+            const parent = this.find(n => n.id === node.pid)
+            if (!parent) {
+                console.warn('parent not found in the tree, please check node.pid')
+                return
+            }
+            arr = parent.children as []
+        }
+        arr.push(node)
+    }
+
+    /**
+     * Convert Tree to Array
+     * @returns result
+     */
     flat() {
         const res: TreeNode[] = []
         this.forEach(item => {
@@ -51,6 +81,10 @@ export default class Arbre {
         return res
     }
 
+    /**
+     * @param callbackFn 
+     * @param data 
+     */
     forEach(callbackFn: CallbackFn<void>, data = this._raw) {
         data.forEach(item => {
             callbackFn(item)
