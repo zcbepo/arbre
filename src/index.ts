@@ -119,7 +119,7 @@ export default class Arbre {
         return ret
     }
 
-    find(callbackFn: CallbackFn<boolean>, data = this._raw) {
+    find(callbackFn: CallbackFn<boolean>, data = this._raw): TreeNode | null {
         for (let i = 0; i < data.length; i++) {
             const element = {...data[i]};
             const filterResult = callbackFn(element)
