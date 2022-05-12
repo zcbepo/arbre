@@ -4,7 +4,7 @@
   "main": "index.js",
   "types": "/lib/index.d.ts",
   "author": "zcbepo",
-  "description": "Array-like Api for Tree structure",
+  "description": "Tree Structure library that provide Apis like Array",
   "license": "MIT",
   "dependencies": {
     "jest": "^28.1.0",
