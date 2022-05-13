@@ -7,6 +7,11 @@ const testTreeData: TreeNode[] = [
 
 const testTree = ArbreTree.from(testTreeData)
 
+test('test foreach', () => {
+    testTree.forEach(item => item.bar = 'bar')
+    expect(testTree.data[0].bar).toBe('bar')
+})
+
 test('test filter', () => {
     const result = testTree.filter(item => item.id > 0)
     const newTree = new ArbreTree(result)
