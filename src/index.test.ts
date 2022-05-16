@@ -7,6 +7,10 @@ const testTreeData: TreeNode[] = [
 
 const testTree = ArbreTree.from(testTreeData)
 
+test('test markPosition', () => {
+    expect(testTree.at('0')?.pos).toBe('0')
+})
+
 test('test foreach', () => {
     testTree.forEach(item => item.bar = 'bar')
     expect(testTree.data[0].bar).toBe('bar')
@@ -31,4 +35,9 @@ test('test find', () => {
 test('test push', () => {
     testTree.push({id: 3, pid: 1})
     expect(testTree.data[0].children?.length).toBe(2)
+})
+
+test('test at', () => {
+    const node = testTree.at('0-1')
+    expect(node?.id).toBe(3)
 })

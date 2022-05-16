@@ -1,6 +1,6 @@
-import { isTreeNode } from "./utils"
+import { filterFn, findFn, forEachFn, isTreeNode, mapFn } from "./utils"
 
-type StringOrNumber = string | number
+export type StringOrNumber = string | number
 
 export interface TreeArrayItem {
     id: StringOrNumber
@@ -14,8 +14,9 @@ export interface TreeNode extends TreeArrayItem {
 
 /**
  * tree iterator callback function, pass TreeNode
+ * @param pos position of treeNode, e.g. 1-2-1
  */
-export type CallbackFn<T> = (element: TreeNode) => T
+export type CallbackFn<T> = (element: TreeNode, pos: string) => T
 
 
 export default class Arbre {
@@ -23,10 +24,17 @@ export default class Arbre {
 
     constructor(raw: TreeNode[]) {
         this._raw = raw
+        this._markPosition()
     }
 
     get data() {
         return this._raw
+    }
+
+    private _markPosition() {
+        this.forEach((element, pos) => {
+            element.pos = pos
+        })
     }
 
     /**
@@ -51,6 +59,28 @@ export default class Arbre {
             }
         })
         return new Arbre(root)
+    }
+
+    /**
+     * return treeNode at the position
+     * @param position 
+     * @returns 
+     */
+    at(position: string) {
+        const positionArr = position.split('-').map(p => parseInt(p))
+        try {
+            let ret = this._raw[positionArr.shift() as number];
+            positionArr.forEach(pos => {
+                ret = ret.children?.[pos] as TreeNode
+            })
+            if (!ret) {
+                throw Error()
+            }
+            return ret
+        } catch {
+            console.warn(`cannot find tree node on position: ${position} in this tree`);
+            return null
+        }
     }
 
     push(node: TreeNode) {
@@ -85,51 +115,19 @@ export default class Arbre {
      * @param callbackFn 
      * @param data 
      */
-    forEach(callbackFn: CallbackFn<void>, data = this._raw) {
-        data.forEach(item => {
-            callbackFn(item)
-            if (item.children?.length) {
-                this.forEach(callbackFn, item.children)
-            }
-        })
+    forEach(callbackFn: CallbackFn<void>) {
+        forEachFn(callbackFn, this._raw)
     }
 
-    map(callbackFn: CallbackFn<any>, data = this._raw) {
-        return data.map(item => {
-            const res = callbackFn({...item})
-            if (item.children) {
-                res.children = this.map(callbackFn, item.children)
-            }
-            return res
-        })
+    map(callbackFn: CallbackFn<any>) {
+        return mapFn(callbackFn, this._raw)
     }
 
-    filter(callbackFn: CallbackFn<boolean>, data = this._raw) {
-        const ret = []
-        for (let i = 0; i < data.length; i++) {
-            const element = {...data[i]};
-            const filterResult = callbackFn(element)
-            if (element.children) {
-                element.children = this.filter(callbackFn, element.children)
-            }
-            if (filterResult || element.children?.length) {
-                ret.push(element)
-            }
-        }
-        return ret
+    filter(callbackFn: CallbackFn<boolean>) {
+        return filterFn(callbackFn, this._raw)
     }
 
-    find(callbackFn: CallbackFn<boolean>, data = this._raw): TreeNode | null {
-        for (let i = 0; i < data.length; i++) {
-            const element = {...data[i]};
-            const filterResult = callbackFn(element)
-            if (filterResult) {
-                return element
-            }
-            if (element.children) {
-                element.children = this.filter(callbackFn, element.children)
-            }
-        }
-        return null
+    find(callbackFn: CallbackFn<boolean>): TreeNode | null {
+        return findFn(callbackFn, this._raw);
     }
 }
