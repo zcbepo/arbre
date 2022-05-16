@@ -1,8 +1,12 @@
 import ArbreTree, { TreeNode } from "./index";
 
-const testTreeData: TreeNode[] = [
-    {id: 1, pid: -1},
-    {id: 2, pid: 1}
+interface FileTreeNode extends TreeNode {
+    name: string
+}
+
+const testTreeData: FileTreeNode[] = [
+    {id: 1, pid: -1, name: 'folder1'},
+    {id: 2, pid: 1, name: 'file1.png'}
 ]
 
 const testTree = ArbreTree.from(testTreeData)
@@ -33,7 +37,7 @@ test('test find', () => {
 })
 
 test('test push', () => {
-    testTree.push({id: 3, pid: 1})
+    testTree.push({id: 3, pid: 1, name: "file2.jpg"})
     expect(testTree.data[0].children?.length).toBe(2)
 })
 

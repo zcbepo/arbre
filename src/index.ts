@@ -10,19 +10,20 @@ export interface TreeArrayItem {
 
 export interface TreeNode extends TreeArrayItem {
     children?: TreeNode[]
+    pos?: string
 }
 
 /**
  * tree iterator callback function, pass TreeNode
  * @param pos position of treeNode, e.g. 1-2-1
  */
-export type CallbackFn<T> = (element: TreeNode, pos: string) => T
+export type CallbackFn<T, T2 extends TreeNode> = (element: T2, pos: string) => T
 
 
-export default class Arbre {
-    private _raw: TreeNode[]
+export default class Arbre<T extends TreeNode> {
+    private _raw: T[]
 
-    constructor(raw: TreeNode[]) {
+    constructor(raw: T[]) {
         this._raw = raw
         this._markPosition()
     }
@@ -42,27 +43,27 @@ export default class Arbre {
      * @param arr 
      * @returns 
      */
-    static from(arr: TreeArrayItem[]) {
-        const map = new Map<StringOrNumber, TreeNode>(), root: TreeNode[] = []
+    static from<T extends TreeArrayItem>(arr: T[]) {
+        const map = new Map<StringOrNumber, T>(), root: T[] = []
         arr.forEach(item => {
             map.set(item.id, {...item, children: []})
         })
         arr.forEach(item => {
             if (item.pid == -1) {
-                root.push(map.get(item.id) as TreeNode)
+                root.push(map.get(item.id) as T)
             } else {
-                const parent = map.get(item.pid) as TreeNode
+                const parent = map.get(item.pid) as any
                 if (!parent.children) {
                     parent.children = []
                 }
-                parent.children.push(map.get(item.id) as TreeNode)
+                parent.children.push(map.get(item.id) as T)
             }
         })
         return new Arbre(root)
     }
 
     /**
-     * return treeNode at the position
+     * return T at the position
      * @param position 
      * @returns 
      */
@@ -71,7 +72,7 @@ export default class Arbre {
         try {
             let ret = this._raw[positionArr.shift() as number];
             positionArr.forEach(pos => {
-                ret = ret.children?.[pos] as TreeNode
+                ret = ret.children?.[pos] as T
             })
             if (!ret) {
                 throw Error()
@@ -83,7 +84,7 @@ export default class Arbre {
         }
     }
 
-    push(node: TreeNode) {
+    push(node: T) {
         if (!isTreeNode(node)) return
         let arr;
         if (node.pid === -1) {
@@ -104,7 +105,7 @@ export default class Arbre {
      * @returns result
      */
     flat() {
-        const res: TreeNode[] = []
+        const res: T[] = []
         this.forEach(item => {
             res.push(item)
         })
@@ -115,19 +116,19 @@ export default class Arbre {
      * @param callbackFn 
      * @param data 
      */
-    forEach(callbackFn: CallbackFn<void>) {
+    forEach(callbackFn: CallbackFn<void, T>) {
         forEachFn(callbackFn, this._raw)
     }
 
-    map(callbackFn: CallbackFn<any>) {
+    map(callbackFn: CallbackFn<any, T>) {
         return mapFn(callbackFn, this._raw)
     }
 
-    filter(callbackFn: CallbackFn<boolean>) {
+    filter(callbackFn: CallbackFn<boolean, T>) {
         return filterFn(callbackFn, this._raw)
     }
 
-    find(callbackFn: CallbackFn<boolean>): TreeNode | null {
+    find(callbackFn: CallbackFn<boolean, T>): T | null {
         return findFn(callbackFn, this._raw);
     }
 }
