@@ -2,7 +2,7 @@
   "name": "arbre-tree",
   "version": "0.0.7",
   "main": "index.js",
-  "types": "/lib/index.d.ts",
+  "types": "./lib/index.d.ts",
   "author": "zcbepo",
   "description": "Tree Structure library that provide Apis like Array",
   "license": "MIT",
