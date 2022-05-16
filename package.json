@@ -16,12 +16,13 @@
     "tslib": "^2.4.0"
   },
   "scripts": {
-    "build": "rimraf lib && rollup -c",
+    "build": "rimraf lib && rollup -c --environment NODE_ENV:production",
     "test": "jest"
   },
   "devDependencies": {
     "@types/jest": "^27.5.0",
     "ts-jest": "^28.0.2",
+    "rollup-plugin-terser": "^7.0.2",
     "typescript": "^4.6.4"
   }
 }
