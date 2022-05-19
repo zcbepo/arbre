@@ -6,6 +6,11 @@
   "author": "zcbepo",
   "description": "Tree Structure library that provide Apis like Array",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zcbepo/arbre"
+  },
+  "homepage": "https://github.com/zcbepo/arbre",
   "keywords": [
     "tree"
   ],
